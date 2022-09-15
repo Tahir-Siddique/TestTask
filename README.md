@@ -41,6 +41,6 @@ Although it's in debugging mode so you can check paths create by visiting
 To check schema of api's you simply needs to go on browser and type `127.0.0.1:8000/api/schema`. Make sure backend server is running.
 
 
-[Note] For sending emails, i am using Console as EmailBackend so what it basically do is that it shows the same email inside the console. So email will be sent to your inbox. But it will be shown in Console/Terminal.
+[Note] For sending emails, i am using Console as EmailBackend so what it basically do is that it shows the same email inside the console. So email will be sent to your inbox. But it will not be shown in Console/Terminal.
 
 ## Thanks. 
