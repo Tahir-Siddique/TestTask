@@ -5,6 +5,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .api import CarApi, CarDetailApi, CatApi, LogoutView, RegisterApi
 from rest_framework_simplejwt import views as jwt_views
 
+
 urlpatterns = [
 
     path('api/register', RegisterApi.as_view()),
