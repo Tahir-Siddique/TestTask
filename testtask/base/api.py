@@ -31,7 +31,7 @@ class MyPagination(PageNumberPagination):
 
 class CarApi(generics.GenericAPIView):
     serializer_class = CarSerializer
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     pagination_class = MyPagination
 
     def post(self, request, *args,  **kwargs):
@@ -47,7 +47,7 @@ class CarApi(generics.GenericAPIView):
 class CarListApi(generics.ListAPIView):
     serializer_class = CarSerializer
     queryset = Car.objects.all()
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     pagination_class = MyPagination
 
 
