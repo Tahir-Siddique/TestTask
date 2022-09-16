@@ -9,6 +9,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.pagination import PageNumberPagination
 
 
 class RegisterApi(generics.GenericAPIView):
@@ -24,9 +25,14 @@ class RegisterApi(generics.GenericAPIView):
         })
 
 
+class MyPagination(PageNumberPagination):
+    page_size = 50
+
+
 class CarApi(generics.GenericAPIView):
     serializer_class = CarSerializer
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
+    pagination_class = MyPagination
 
     def post(self, request, *args,  **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -37,13 +43,12 @@ class CarApi(generics.GenericAPIView):
             "message": "New car added.",
         })
 
-    def get(self, request, *args,  **kwargs):
-        data = Car.objects.all()
-        car = CarSerializer(data, many=True)
-        return Response({
-            "data": car.data,
 
-        })
+class CarListApi(generics.ListAPIView):
+    serializer_class = CarSerializer
+    queryset = Car.objects.all()
+    # permission_classes = [IsAuthenticated]
+    pagination_class = MyPagination
 
 
 class CarDetailApi(APIView):

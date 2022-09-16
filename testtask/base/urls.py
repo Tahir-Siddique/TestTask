@@ -2,14 +2,15 @@ from django.urls import path
 
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from .api import CarApi, CarDetailApi, CatApi, CatDetailApi, LogoutView, RegisterApi
+from .api import CarApi, CarDetailApi, CarListApi, CatApi, CatDetailApi, LogoutView, RegisterApi
 from rest_framework_simplejwt import views as jwt_views
 
 
 urlpatterns = [
 
     path('api/register', RegisterApi.as_view()),
-    path("api/car", CarApi.as_view(), name='car-list'),
+    path("api/car", CarApi.as_view(), name='car'),
+    path("api/carlist", CarListApi.as_view(), name='cars-list'),
     path("api/editcar/<int:car_id>", CarDetailApi.as_view(), name='car-edit'),
 
     path("api/cat", CatApi.as_view(), name='categories-list'),

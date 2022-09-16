@@ -12,19 +12,28 @@ export default function Homepage() {
     // let { user } = useContext(AuthContext)
     const [Cars, setCars] = useState([])
     const { authToken } = useContext(AuthContext)
+    const [NextPage, setNextPage] = useState('')
+    const [PreviousPage, setPreviousPage] = useState('')
+    const [TotalPages, setTotalPages] = useState(0)
+    const loadCars = (url = `${API_URL}/api/carlist`) => {
+        if (url !== null) {
 
-    const loadCars = () => {
-        axios.get(`${API_URL}/api/car`, {
-            headers: {
-                'Authorization': 'Bearer ' + String(authToken.access)
-            }
-        }).then((resp) => resp.data).then(data => {
-            console.log(data['data'])
-            setCars(data.data)
+            axios.get(url, {
+                headers: {
+                    'Authorization': 'Bearer ' + String(authToken.access)
+                }
+            }).then((resp) => resp.data).then(data => {
+                setNextPage(data.next)
+                setPreviousPage(data.previous)
+                setTotalPages(data.count)
+                console.log(data['results'])
+                setCars(data.results)
 
-            // navigate('/')
-            return data
-        })
+                // navigate('/')
+                return data
+            })
+        }
+
     }
     useEffect(() => {
         loadCars()
@@ -35,6 +44,16 @@ export default function Homepage() {
         <div>
             <Navbar></Navbar>
             <div className="container my-4">
+                <div className="row">
+                    <div className="col-12 text-center" style={{ margin: "0 auto" }}>
+                        <nav aria-label="Page navigation example">
+                            <ul className="pagination">
+                                <li className="page-item"><Link className="page-link" onClick={() => { loadCars(PreviousPage !== null ? PreviousPage : null) }}>Previous</Link></li>
+                                <li className="page-item"><Link className="page-link" onClick={() => { loadCars(NextPage !== null ? NextPage : null) }}>Next</Link></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
                 <div className="row">
                     {Cars.map(car => {
                         return <div className="col-md-3 m-2" key={car.id}>
@@ -49,6 +68,7 @@ export default function Homepage() {
                         </div>
                     })}
                 </div>
+
 
             </div>
         </div >

@@ -10,7 +10,7 @@ import { Link, useParams } from "react-router-dom";
 
 export default function AddCar() {
 
-    const [Category, setCategory] = useState(1)
+    const [Category, setCategory] = useState(-1)
     const [Categories, setCategories] = useState([])
     const [Color, setColor] = useState('')
     const [Model, setModel] = useState('')
@@ -45,11 +45,10 @@ export default function AddCar() {
                 'Authorization': 'Bearer ' + String(authToken.access)
             }
         }).then((resp) => resp.data).then(data => {
-            console.log(data['data'])
+            // console.log(data['data'])
             setCategories(data.data)
-            if (Categories.length > 0) {
-                setCategory(Categories[0].id)
-            }
+            console.log(Categories);
+            setCategory(data.data[0].id)
             // navigate('/')
             return data
         })
