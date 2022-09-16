@@ -5,7 +5,7 @@ import AuthContext from '../context/context';
 import Navbar from './navbar';
 import axios from "axios";
 import { API_URL } from '../config';
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 
 export default function AddCar() {
@@ -82,6 +82,8 @@ export default function AddCar() {
                                 <select className="form-control" id="cat" onChange={(e) => { setCategory(e.target.value); }}>
                                     {Categories.map(elem => <option key={elem.id} value={elem.id}>{elem.text}</option>)}
                                 </select>
+
+                                <Link className='btn btn-danger mt-2' to={"/modifycat/" + Category}>Edit</Link>
                             </div>
                             <Form.Group className="mb-3">
                                 <Form.Label>Color</Form.Label>

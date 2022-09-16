@@ -51,7 +51,7 @@ class CarDetailApi(APIView):
 
     def get_object(self, car_id):
         '''
-        Helper method to get the object with given todo_id, and user_id
+        Helper method to get the object with given car_id
         '''
         try:
             return Car.objects.get(id=car_id)
@@ -61,22 +61,22 @@ class CarDetailApi(APIView):
     # 3. Retrieve
     def get(self, request, car_id, *args, **kwargs):
         '''
-        Retrieves the Todo with given todo_id
+        Retrieves the Car with given car_id
         '''
-        todo_instance = self.get_object(car_id)
-        if not todo_instance:
+        car_instance = self.get_object(car_id)
+        if not car_instance:
             return Response(
                 {"message": "Object with car id does not exists"},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        serializer = CarSerializer(todo_instance)
+        serializer = CarSerializer(car_instance)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     # 4. Update
     def put(self, request, car_id, *args, **kwargs):
         '''
-        Updates the todo item with given todo_id if exists
+        Updates the car item with given car_id if exists
         '''
         car_instance = self.get_object(car_id)
         if not car_instance:
@@ -94,7 +94,7 @@ class CarDetailApi(APIView):
     # 5. Delete
     def delete(self, request, car_id, *args, **kwargs):
         '''
-        Deletes the todo item with given todo_id if exists
+        Deletes the Car item with given car_id if exists
         '''
         car_instance = self.get_object(car_id)
         if not car_instance:
@@ -109,6 +109,69 @@ class CarDetailApi(APIView):
         )
 
 
+class CatDetailApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self, cat_id):
+        '''
+        Helper method to get the object with given cat_id,
+        '''
+        try:
+            return Category.objects.get(id=cat_id)
+        except Category.DoesNotExist:
+            return None
+
+    # 3. Retrieve
+    def get(self, request, cat_id, *args, **kwargs):
+        '''
+        Retrieves the Category with given cat_id
+        '''
+        cat_instance = self.get_object(cat_id)
+        if not cat_instance:
+            return Response(
+                {"message": "Object with cat_id does not exists"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        serializer = CatSerializer(cat_instance)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # 4. Update
+    def put(self, request, cat_id, *args, **kwargs):
+        '''
+        Updates the Category item with given cat_id if exists
+        '''
+        car_instance = self.get_object(cat_id)
+        if not car_instance:
+            return Response(
+                {"message": "Object with car id does not exists"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        serializer = CatSerializer(
+            instance=car_instance, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": 'Data updated successfully'}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    # 5. Delete
+    def delete(self, request, cat_id, *args, **kwargs):
+        '''
+        Deletes the Category item with given cat_id if exists
+        '''
+        cat_instance = self.get_object(cat_id)
+        if not cat_instance:
+            return Response(
+                {"res": "Object with cat id does not exists"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        cat_instance.delete()
+        return Response(
+            {"message": "Category removed!"},
+            status=status.HTTP_200_OK
+        )
+
+
 class CatApi(generics.GenericAPIView):
     serializer_class = CatSerializer
     permission_classes = [IsAuthenticated]
@@ -116,10 +179,10 @@ class CatApi(generics.GenericAPIView):
     def post(self, request, *args,  **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        car = serializer.save()
+        cat = serializer.save()
         return Response({
-            "cat": CatSerializer(car, context=self.get_serializer_context()).data,
-            "message": "New car added.",
+            "cat": CatSerializer(cat, context=self.get_serializer_context()).data,
+            "message": "New category added.",
         })
 
     def get(self, request, *args,  **kwargs):
